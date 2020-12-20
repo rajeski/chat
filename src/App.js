@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import './App.css';
 
 import firebase from 'firebase/app';
@@ -31,8 +31,10 @@ const [user] = useAuthState(auth);
   return (
     <div className="App">
       <header className="App-header">
- 
+    <h1>WELCOME</h1>
+      <signOut />
       </header>
+
       <section>
         {user ? <ChatRoom /> : <SignIn /> }
       </section>
@@ -49,7 +51,8 @@ function SignIn() {
 
   return (
     <>
-    <button className="sign-in" onClick={signinwithGoogle}>Sign in with Google</button>
+      <button className="sign-in" onClick={signinwithGoogle}>Sign in with Google</button>
+      <p>Please do not violate community guidelines or you will BANNED!</p>
     </>
   )
 
@@ -84,32 +87,31 @@ function ChatRoom() {
       uid, 
       photoURL
     });
+
     setFormValue('');
 
     dummy.current.scrollIntoView({ behavior: 'smooth' });
 
   }
-}
 
-return (
-  <>
+return (<>
   <main>
+
     {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
 
-    <div ref={dummy}></div>
+    <span ref={dummy}></span>
 
   </main>
 
-<form onSubmit={sendMessage}>
+  <form onSubmit={sendMessage}>
 
-<input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+    <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
 
-<button type="submit"></button>
+    <button type="submit" disabled={!formValue}>🕊️</button>
 
-</form>
-
-  </>
-)
+  </form>
+</>)
+}
 
 function ChatMessage(props) {
   const { text, uid, photoURL } = props.message;
